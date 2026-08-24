@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background-color: #99f6e4;
+  color: #0f172a;
+}
+
+/* Focus ring consistent with the brand color, kept subtle */
+:focus-visible {
+  outline: 2px solid #0f766e;
+  outline-offset: 2px;
+}

@@ -1,0 +1,62 @@
+# Render Blueprint — lets Render auto-configure the service from this file
+# instead of you filling in every field by hand.
+# Usage: Render dashboard -> New -> Blueprint -> pick this repo -> Apply.
+# See DEPLOY_RENDER.md for the full walkthrough (including the free
+# external cron setup for the background worker, since Render's free tier
+# doesn't include a Background Worker service type).
+services:
+  - type: web
+    name: healthcare-appointment-manager
+    env: node
+    plan: free
+    # --include=dev is explicit so devDependencies (typescript, tailwindcss,
+    # etc., needed only to build) always install regardless of how Render's
+    # npm interprets NODE_ENV=production.
+    buildCommand: npm install --include=dev && npm run build
+    # `npm start` seeds demo data (idempotent — skips existing accounts)
+    # before booting, so the app is always in a usable state even after the
+    # free tier's disk resets on restart.
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Required: this app uses Node's built-in `node:sqlite` module, only
+      # available from Node 22 onward. Render defaults to an older LTS
+      # unless told otherwise (also pinned via .node-version at repo root).
+      - key: NODE_VERSION
+        value: "22"
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: WORKER_SECRET
+        generateValue: true
+      - key: DATABASE_FILE
+        value: ./data/app.db
+      - key: CLINIC_TIMEZONE
+        value: Asia/Kolkata
+      # Optional integrations — leave blank to run in simulated/no-sync mode.
+      # Fill these in from the Render dashboard (Environment tab) once the
+      # service exists; render.yaml itself should not contain real secrets.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: LLM_MODEL
+        value: claude-3-5-haiku-20241022
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_SECURE
+        value: "false"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM
+        value: "Healthcare Clinic <no-reply@clinic.example>"
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_REDIRECT_URI
+        sync: false
+      - key: EMAIL_SIMULATE_FAILURE_RATE
+        value: "0"

@@ -5,6 +5,23 @@ symptoms in advance, doctors get an AI-generated pre-visit summary with an urgen
 turned into a patient-friendly summary with medication reminders, and both sides get email + Google Calendar
 updates.
 
+## Live demo
+
+**[healthcare-appointment-manager-qsyh.onrender.com](https://healthcare-appointment-manager-qsyh.onrender.com)**
+
+Deployed on Render's free tier — the service spins down after ~15 minutes idle, so the first request after a
+while may take 30-60 seconds to wake up. Demo accounts (also listed on the login page):
+
+| Role    | Email                     | Password      |
+|---------|----------------------------|---------------|
+| Admin   | admin@clinic.demo          | Admin@1234    |
+| Doctor  | anjali.rao@clinic.demo     | Doctor@1234   |
+| Patient | ravi.kumar@clinic.demo     | Patient@1234  |
+
+No LLM/email/calendar credentials are configured on this deployment, so AI summaries and emails run in
+"simulated" mode (clearly labeled in the UI) — see
+[Running without any external credentials](#running-without-any-external-credentials).
+
 ## Contents
 
 1. [Tech stack & why](#tech-stack--why)
